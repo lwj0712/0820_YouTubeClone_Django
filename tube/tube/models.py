@@ -34,3 +34,19 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Subscription(models.Model):
+    subscriber = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="subscriptions"
+    )
+    channel = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="subscribers"
+    )
+    subscribed_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("subscriber", "channel")  # 구독자와 채널은 유일해야 함
+
+    def __str__(self):
+        return f"{self.subscriber.username}이 {self.channel.username}를 구독하였습니다."
